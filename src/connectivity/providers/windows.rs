@@ -42,11 +42,7 @@ impl Connectivity for WiFi {
         Self::add_profile(ssid, password)?;
 
         let output = Command::new("netsh")
-            .args(&[
-                "wlan",
-                "connect",
-                &format!("name={}", ssid),
-            ])
+            .args(&["wlan", "connect", &format!("name={}", ssid)])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 

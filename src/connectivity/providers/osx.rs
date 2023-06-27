@@ -13,7 +13,7 @@ impl Connectivity for WiFi {
         }
 
         let output = Command::new("networksetup")
-            .args(&["-setairportnetwork", &self.interface, &ssid, &password])
+            .args(["-setairportnetwork", &self.interface, ssid, password])
             .output()
             .map_err(|err| WifiConnectionError::FailedToConnect(format!("{}", err)))?;
 
@@ -31,7 +31,7 @@ impl Connectivity for WiFi {
     /// Attempts to disconnect from a wireless network currently connected to.
     fn disconnect(&self) -> Result<bool, WifiConnectionError> {
         let output = Command::new("networksetup")
-            .args(&[
+            .args([
                 "-removepreferredwirelessnetwork",
                 &*self.interface,
                 &*self.connection.as_ref().unwrap().ssid,
@@ -42,5 +42,18 @@ impl Connectivity for WiFi {
         Ok(String::from_utf8_lossy(&output.stdout)
             .as_ref()
             .contains("disconnect"))
+    }
+
+    fn scan(&self) -> Result<bool, WifiConnectionError> {
+        let output = Command::new("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport")
+            .args([
+                "-s"
+            ])
+            .output()
+            .map_err(|err| WifiConnectionError::FailedScan(format!("{}", err)))?;
+
+        Ok(String::from_utf8_lossy(&output.stdout)
+            .as_ref()
+            .contains("SSID"))
     }
 }

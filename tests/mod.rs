@@ -23,3 +23,14 @@ fn create_hotspot() {
 
   assert_eq!(hotspot_created, true);
 }
+
+#[test]
+fn scan_wifi() {
+    let config = Some(Config {
+        interface: Some("en0"),
+    });
+
+    let wifi = WiFi::new(config);
+
+    assert_eq!(wifi.scan().unwrap(), true);
+}

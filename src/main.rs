@@ -15,7 +15,7 @@ fn main() -> Result<(), WifiConnectionError> {
     match wifi.connect("CSIS_MH", "") {
         Ok(result) => println!(
             "{}",
-            if result == true {
+            if result {
                 "Connection Successfull."
             } else {
                 "Invalid password."

@@ -14,6 +14,9 @@ pub trait Connectivity: fmt::Debug {
 
     /// Disconnects from a wireless network currently connected to.
     fn disconnect(&self) -> Result<bool, WifiConnectionError>;
+
+    /// Performs a wireless scan
+    fn scan(&self) -> Result<bool, WifiConnectionError>;
 }
 
 /// Error that occurs when attempting to connect to a wireless network.
@@ -26,6 +29,8 @@ pub enum WifiConnectionError {
     FailedToConnect(String),
     /// Failed to disconnect from wireless network. Try turning the wireless interface down.
     FailedToDisconnect(String),
+    /// Scan failed
+    FailedScan(String),
     /// A wireless error occurred.
     Other { kind: WifiError },
     // SsidNotFound,
